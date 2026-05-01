@@ -31,9 +31,9 @@ A lightweight, containerized monitoring solution featuring Prometheus for metric
 
 | Service | URL | Default Credentials |
 | :--- | :--- | :--- |
-| **Grafana** | [http://localhost:3000](http://localhost:3000) | `admin` / `admin` |
-| **Prometheus** | [http://localhost:9090](http://localhost:9090) | None |
-| **Node Exporter** | [http://localhost:9100](http://localhost:9100) | None |
+| **Grafana** | [http://localhost:3007](http://localhost:3007) | `admin` / `admin` |
+| **Prometheus** | [http://localhost:9097](http://localhost:9097) | None |
+| **Node Exporter** | [http://localhost:9107](http://localhost:9107) | None |
 
 ## ⚙️ Configuration
 
