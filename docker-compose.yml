@@ -47,6 +47,7 @@ services:
     image: nvidia/dcgm-exporter:latest
     container_name: dcgm_exporter
     restart: unless-stopped
+    profiles: ["gpu"]
     deploy:
       resources:
         reservations:
