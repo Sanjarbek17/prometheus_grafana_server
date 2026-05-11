@@ -43,6 +43,19 @@ services:
     depends_on:
       - prometheus
     restart: unless-stopped
+  dcgm-exporter:
+    image: nvidia/dcgm-exporter:latest
+    container_name: dcgm_exporter
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "${DCGM_EXPORTER_PORT:-9407}:9400"
 
 volumes:
   prometheus_data:
