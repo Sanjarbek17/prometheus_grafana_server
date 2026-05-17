@@ -11,10 +11,14 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
+    network_mode: host
+    pid: host
     restart: unless-stopped
     # 1. Mount the host's core directories into the container as read-only
     volumes:
@@ -27,8 +31,6 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
-    ports:
-      - 9107:9100
 
   grafana:
     image: grafana/grafana:latest
