@@ -11,8 +11,8 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - monitor_net
 
   node_exporter:
     image: prom/node-exporter:latest
@@ -46,6 +46,9 @@ services:
     depends_on:
       - prometheus
     restart: unless-stopped
+    networks:
+      - monitor_net
+
   dcgm-exporter:
     image: nvidia/dcgm-exporter:latest
     container_name: dcgm_exporter
@@ -60,6 +63,16 @@ services:
               capabilities: [gpu]
     ports:
       - "${DCGM_EXPORTER_PORT:-9407}:9400"
+    networks:
+      - monitor_net
+
+networks:
+  monitor_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+          gateway: 172.25.0.1
 
 volumes:
   prometheus_data:
