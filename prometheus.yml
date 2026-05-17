@@ -9,7 +9,7 @@ scrape_configs:
 
   - job_name: "node"
     static_configs:
-      - targets: ["host.docker.internal:9100"]
+      - targets: ["host.docker.internal:9107"]
 
   - job_name: "dcgm"
     static_configs:
