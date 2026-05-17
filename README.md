@@ -63,6 +63,18 @@ docker compose down
 docker compose down -v
 ```
 
+## 🚨 Troubleshooting
+
+### "Context Deadline Exceeded" / "No Data" for Node Exporter on Ubuntu
+To accurately collect host network packets, `node_exporter` is configured with `network_mode: host`. Prometheus reaches it using the `host.docker.internal` gateway.
+
+If your Ubuntu server uses a strict internal firewall like UFW, it will block traffic coming from the Docker bridge network to the host, resulting in a `context deadline exceeded` error in Prometheus and "No data" in Grafana.
+
+**The Fix:** Tell UFW to trust all internal Docker bridge IP ranges (172.16.0.0 to 172.31.255.255) by running this single command on your host:
+```bash
+sudo ufw allow from 172.16.0.0/12
+```
+
 ## 📂 Project Structure
 
 - `docker-compose.yml`: Defines the services, networks, and volumes.
