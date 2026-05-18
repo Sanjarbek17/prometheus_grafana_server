@@ -43,7 +43,7 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SECURITY_COOKIE_NAME=grafana_session_${GRAFANA_PORT:-8007}
+      - GF_AUTH_LOGIN_COOKIE_NAME=grafana_session_${GRAFANA_PORT:-8007}
     depends_on:
       - prometheus
     restart: unless-stopped
