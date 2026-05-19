@@ -11,6 +11,11 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
+      - "--enable-feature=expand-external-variables"
+    environment:
+      - PC1_TARGET=${PC1_TARGET:-host.docker.internal:9107}
+      - PC1_ALIAS=${PC1_ALIAS:-Main-Server}
+      - PC1_IP=${PC1_IP:-127.0.0.1}
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"

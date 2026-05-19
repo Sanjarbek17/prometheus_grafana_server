@@ -18,19 +18,10 @@ scrape_configs:
 
   - job_name: "node"
     static_configs:
-      - targets: ["host.docker.internal:9107"]
+      - targets: ["${PC1_TARGET}"]
         labels:
-          alias: "Main-Server"
-          ip: "127.0.0.1"
-      # To monitor additional PCs, list them here with their IP/port, custom aliases, and IPs:
-      # - targets: ["192.168.1.50:9107"]
-      #   labels:
-      #     alias: "Office-Desktop"
-      #     ip: "192.168.1.50"
-      # - targets: ["192.168.1.60:9107"]
-      #   labels:
-      #     alias: "Home-Laptop"
-      #     ip: "192.168.1.60"
+          alias: "${PC1_ALIAS}"
+          ip: "${PC1_IP}"
     relabel_configs:
       - target_label: instance
         replacement: "node_exporter:9100"
