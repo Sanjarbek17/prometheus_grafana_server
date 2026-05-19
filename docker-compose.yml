@@ -5,13 +5,19 @@ services:
     ports:
       - "9097:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.tmpl.yml
       - ./alert.rules.yml:/etc/prometheus/alert.rules.yml
+      - prometheus_config:/etc/prometheus
       - prometheus_data:/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-      - "--enable-feature=expand-external-variables"
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        sed -e 's/\$${PC1_TARGET}/'$$PC1_TARGET'/g' \
+            -e 's/\$${PC1_ALIAS}/'$$PC1_ALIAS'/g' \
+            -e 's/\$${PC1_IP}/'$$PC1_IP'/g' \
+            /etc/prometheus/prometheus.tmpl.yml > /etc/prometheus/prometheus.yml
+        exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
     environment:
       - PC1_TARGET=${PC1_TARGET:-host.docker.internal:9107}
       - PC1_ALIAS=${PC1_ALIAS:-Main-Server}
@@ -95,3 +101,4 @@ volumes:
   prometheus_data:
   grafana_data:
   alertmanager_config:
+  prometheus_config:
