@@ -2,6 +2,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    user: root
     ports:
       - "9097:9090"
     volumes:
@@ -64,6 +65,7 @@ services:
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
+    user: root
     ports:
       - "9093:9093"
     volumes:
