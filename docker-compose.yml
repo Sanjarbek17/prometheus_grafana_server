@@ -61,11 +61,16 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
-    command:
-      - "--config.file=/etc/alertmanager/alertmanager.yml"
-      - "--storage.path=/alertmanager"
-      - "--enable-feature=expand-external-variables"
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.tmpl.yml
+      - alertmanager_config:/etc/alertmanager
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        sed -e 's/\$${TELEGRAM_BOT_TOKEN}/'$$TELEGRAM_BOT_TOKEN'/g' \
+            -e 's/\$${TELEGRAM_CHAT_ID}/'$$TELEGRAM_CHAT_ID'/g' \
+            /etc/alertmanager/alertmanager.tmpl.yml > /etc/alertmanager/alertmanager.yml
+        exec /bin/alertmanager --config.file=/etc/alertmanager/alertmanager.yml --storage.path=/alertmanager
     environment:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
@@ -89,3 +94,4 @@ services:
 volumes:
   prometheus_data:
   grafana_data:
+  alertmanager_config:
