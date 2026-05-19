@@ -1,9 +1,9 @@
 groups:
   - name: node_exporter_alerts
     rules:
-      # Alert for any instance that is down (including node_exporter itself)
+      # Alert for any node exporter target that is down
       - alert: InstanceDown
-        expr: up == 0
+        expr: up{job="node"} == 0
         for: 1m
         labels:
           severity: critical
@@ -13,7 +13,7 @@ groups:
 
       # Alert for high CPU load
       - alert: HostHighCpuLoad
-        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 85
+        expr: 100 - (avg by(instance, alias, ip) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 85
         for: 2m
         labels:
           severity: warning
@@ -43,7 +43,7 @@ groups:
 
       # Alert for high network traffic (combined receive and transmit > 100 MB/s)
       - alert: HostHighNetworkTraffic
-        expr: (sum by(instance) (rate(node_network_receive_bytes_total{device!~"lo"}[2m]) + rate(node_network_transmit_bytes_total{device!~"lo"}[2m]))) > 104857600
+        expr: (sum by(instance, alias, ip) (rate(node_network_receive_bytes_total{device!~"lo"}[2m]) + rate(node_network_transmit_bytes_total{device!~"lo"}[2m]))) > 104857600
         for: 2m
         labels:
           severity: warning
