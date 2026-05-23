@@ -33,7 +33,7 @@ groups:
 
       # Alert for out of disk space
       - alert: HostOutOfDiskSpace
-        expr: (node_filesystem_avail_bytes{mountpoint="/rootfs"} * 100) / node_filesystem_size_bytes{mountpoint="/rootfs"} < 10
+        expr: (node_filesystem_avail_bytes{fstype=~"ext4|xfs|btrfs|zfs"} * 100) / node_filesystem_size_bytes{fstype=~"ext4|xfs|btrfs|zfs"} < 10
         for: 2m
         labels:
           severity: warning
