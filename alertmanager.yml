@@ -24,6 +24,6 @@ receivers:
       <b>Summary:</b> {{ .Annotations.summary }}
       <b>Description:</b> {{ .Annotations.description }}
       
-      <b>Time:</b> {{ .StartsAt.Format "2006-01-02 15:04:05 UTC" }}
+      <b>Time:</b> {{ .StartsAt.Local.Format "2006-01-02 15:04:05" }} (Tashkent Time)
       -------------------------------------
       {{ end }}
